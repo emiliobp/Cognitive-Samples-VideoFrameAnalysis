@@ -35,6 +35,7 @@ using System;
 using VideoFrameAnalyzer;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
+using System.Windows.Forms;
 
 namespace BasicConsoleSample
 {
@@ -58,7 +59,18 @@ namespace BasicConsoleSample
             grabber.AnalysisFunction = async frame =>
             {
                 Console.WriteLine("Submitting frame acquired at {0}", frame.Metadata.Timestamp);
+
+                // Save in some directory
+                // in this example, we'll generate a random filename e.g 47059681-95ed-4e95-9b50-320092a3d652.png
+                // snapshot.Save(@"C:\Users\sdkca\Desktop\mysnapshot.png", ImageFormat.Png);
+                Application.EnableVisualStyles();
+
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                Application.Run(new Form1());
+
                 // Encode image and submit to Face API. 
+                Console.WriteLine("Screenshot taken");
                 return await faceClient.DetectAsync(frame.Image.ToMemoryStream(".jpg"));
             };
 
