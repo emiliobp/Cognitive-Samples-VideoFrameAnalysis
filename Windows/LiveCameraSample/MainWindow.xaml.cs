@@ -165,7 +165,22 @@ namespace LiveCameraSample
             // Create local face detector. 
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
+        /*
+        private async Task<LiveCameraResult> CreateFaceGroup()
+        {
+            // Create an empty PersonGroup
+            string personGroupId = "myfriends";
+            await _faceClient.CreatePersonGroupAsync(personGroupId, "My Friends");
 
+            // Define Anna
+            CreatePersonResult friend1 = await _faceClient.CreatePersonAsync(
+                // Id of the PersonGroup that the person belonged to
+                personGroupId,
+                // Name of the person
+                "Anna"
+            );
+        }
+        */
         /// <summary> Function which submits a frame to the Face API. </summary>
         /// <param name="frame"> The video frame to submit. </param>
         /// <returns> A <see cref="Task{LiveCameraResult}"/> representing the asynchronous API call,

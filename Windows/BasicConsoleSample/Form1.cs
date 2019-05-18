@@ -93,12 +93,17 @@ namespace BasicConsoleSample
                 // Save in some directory
                 // in this example, we'll generate a random filename e.g 47059681-95ed-4e95-9b50-320092a3d652.png
                 // snapshot.Save(@"C:\Users\sdkca\Desktop\mysnapshot.png", ImageFormat.Png);
-                snapshot.Save(string.Format(@"C:\Users\adminDev\Desktop\images\{0}.png", Guid.NewGuid()), ImageFormat.Png);
+                snapshot.Save(string.Format(@"C:\Users\Emilio Blanco\Desktop\{0}.png", Guid.NewGuid()), ImageFormat.Png);
             }
             else
             {
                 Console.WriteLine("Cannot take picture if the camera isn't capturing image!");
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

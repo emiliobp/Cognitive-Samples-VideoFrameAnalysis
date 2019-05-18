@@ -71,6 +71,8 @@ namespace BasicConsoleSample
 
                 // Encode image and submit to Face API. 
                 Console.WriteLine("Screenshot taken");
+                Console.WriteLine(frame.Image.SaveImage("C:\\Users\\Emilio Blanco\\Desktop\\test.jpg").ToString());
+                frame.Image.SaveImage("C:\\Users\\Emilio Blanco\\Desktop\\test.jpg");
                 return await faceClient.DetectAsync(frame.Image.ToMemoryStream(".jpg"));
             };
 
