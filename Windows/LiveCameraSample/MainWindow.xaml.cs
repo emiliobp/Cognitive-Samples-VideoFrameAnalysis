@@ -40,6 +40,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Microsoft.ProjectOxford.Face.Contract;
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -165,8 +166,8 @@ namespace LiveCameraSample
             // Create local face detector. 
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
-        /*
-        private async Task<LiveCameraResult> CreateFaceGroup()
+        
+        private async Task<LiveCameraResult> CreateFaceGroup(String personName)
         {
             // Create an empty PersonGroup
             string personGroupId = "myfriends";
@@ -177,10 +178,11 @@ namespace LiveCameraSample
                 // Id of the PersonGroup that the person belonged to
                 personGroupId,
                 // Name of the person
-                "Anna"
+                personName
             );
+            return new LiveCameraResult { PersonResult = friend1 };
         }
-        */
+        
         /// <summary> Function which submits a frame to the Face API. </summary>
         /// <param name="frame"> The video frame to submit. </param>
         /// <returns> A <see cref="Task{LiveCameraResult}"/> representing the asynchronous API call,
