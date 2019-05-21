@@ -40,6 +40,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Microsoft.ProjectOxford.Common;
 using Microsoft.ProjectOxford.Face.Contract;
 using Newtonsoft.Json;
 using OpenCvSharp;
@@ -169,9 +170,44 @@ namespace LiveCameraSample
         
         private async Task<LiveCameraResult> CreateFaceGroup(String personName)
         {
-            // Create an empty PersonGroup
+            bool groupExists = false;
             string personGroupId = "myfriends";
-            await _faceClient.CreatePersonGroupAsync(personGroupId, "My Friends");
+            // Test whether the group already exists
+            try
+            {
+                await _faceClient.GetPersonGroupAsync(personGroupId);
+                groupExists = true;
+            }
+            catch (ClientException ex)
+            {
+                if (ex.Error.Code != "PersonGroupNotFound")
+                {
+                    throw;
+                }
+                else
+                {
+
+                }
+            }
+
+            // check to see if group exists and if so delete the group.
+            if (groupExists)
+            {
+                await _faceClient.DeletePersonGroupAsync(personGroupId);
+            }
+
+            try
+            {
+                await _faceClient.CreatePersonGroupAsync(personGroupId, personGroupId);
+            }
+            catch (ClientException ex)
+            {
+                throw;
+            }
+
+            // Create an empty PersonGroup
+            //string personGroupId = "myfriends";
+            //await _faceClient.CreatePersonGroupAsync(personGroupId, "My Friends");
 
             // Define Anna
             CreatePersonResult friend1 = await _faceClient.CreatePersonAsync(
