@@ -58,6 +58,7 @@ namespace LiveCameraSample
     public partial class MainWindow : System.Windows.Window
     {
         private FaceAPI.FaceServiceClient _faceClient = null;
+        //private FaceAPI.FaceServiceClient _faceClient = new FaceAPI.FaceServiceClient("Subscription");
         private VisionAPI.VisionServiceClient _visionClient = null;
         private readonly FrameGrabber<LiveCameraResult> _grabber = null;
         private static readonly ImageEncodingParam[] s_jpegParams = {
@@ -168,15 +169,15 @@ namespace LiveCameraSample
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
         
-        private async Task<LiveCameraResult> CreateFaceGroup(String personName)
+        private async Task<PersonGroup> CreateFaceGroup(String personName)
         {
             bool groupExists = false;
             string personGroupId = "myfriends";
             // Test whether the group already exists
             try
             {
-                await _faceClient.GetPersonGroupAsync(personGroupId);
-                groupExists = true;
+               return await FaceAPI.GetPersonGroupAsync(personGroupId);
+                //groupExists = true;
             }
             catch (ClientException ex)
             {
@@ -184,12 +185,9 @@ namespace LiveCameraSample
                 {
                     throw;
                 }
-                else
-                {
-
-                }
+                throw;
             }
-
+/**
             // check to see if group exists and if so delete the group.
             if (groupExists)
             {
@@ -216,7 +214,7 @@ namespace LiveCameraSample
                 // Name of the person
                 personName
             );
-            return new LiveCameraResult { PersonResult = friend1 };
+    */
         }
         
         /// <summary> Function which submits a frame to the Face API. </summary>
@@ -410,12 +408,12 @@ namespace LiveCameraSample
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!CameraList.HasItems)
+         /**   if (!CameraList.HasItems)
             {
                 MessageArea.Text = "No cameras found; cannot start processing";
                 return;
             }
-
+        */
             // Clean leading/trailing spaces in API keys. 
             Properties.Settings.Default.FaceAPIKey = Properties.Settings.Default.FaceAPIKey.Trim();
             Properties.Settings.Default.VisionAPIKey = Properties.Settings.Default.VisionAPIKey.Trim();
@@ -424,6 +422,8 @@ namespace LiveCameraSample
             _faceClient = new FaceAPI.FaceServiceClient(Properties.Settings.Default.FaceAPIKey, Properties.Settings.Default.FaceAPIHost);
             _visionClient = new VisionAPI.VisionServiceClient(Properties.Settings.Default.VisionAPIKey, Properties.Settings.Default.VisionAPIHost);
 
+            PersonGroup x = await CreateFaceGroup("Daniel");
+            MessageArea.Text = x.ToString();
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
 
