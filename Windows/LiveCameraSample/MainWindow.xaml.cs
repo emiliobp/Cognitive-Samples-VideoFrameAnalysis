@@ -226,6 +226,7 @@ namespace LiveCameraSample
         ///     and containing the faces returned by the API. </returns>
         private async Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame)
         {
+            IList<DetectedFace> faces = new List<DetectedFace>();
             // Encode image. 
             var jpg = frame.Image.ToMemoryStream(".jpg", s_jpegParams);
             // Submit image to API. 
@@ -242,11 +243,11 @@ namespace LiveCameraSample
                     FaceAttributeType.Smile, FaceAttributeType.Emotion,
                     FaceAttributeType.Glasses, FaceAttributeType.Hair
                 };
-            IList<DetectedFace> faces = await _faceClient.Face.DetectWithStreamAsync(jpg, returnFaceAttributes: faceAttributes);
+            faces = await _faceClient.Face.DetectWithStreamAsync(jpg, true,false, faceAttributes);
             // Count the API call. 
             Properties.Settings.Default.FaceAPICallCount++;
             // Output. 
-            return faces ;
+            return new LiveCameraResult {DF=faces[0]};//CAMBIAR PARA REGRESAR SOLO UN VALOR NO SOLO EL PRIMERO
         }
 
         /// <summary> Function which submits a frame to the Emotion API. </summary>
