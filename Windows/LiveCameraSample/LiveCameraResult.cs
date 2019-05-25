@@ -31,6 +31,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // 
 using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+using System.Collections.Generic;
 
 namespace LiveCameraSample
 {
@@ -38,6 +39,7 @@ namespace LiveCameraSample
     public class LiveCameraResult
     {
         public Microsoft.Azure.CognitiveServices.Vision.Face.Models.DetectedFace DF { get; set; }
+        public IList<Microsoft.Azure.CognitiveServices.Vision.Face.Models.DetectedFace> UserFace { get; set; }
         public Microsoft.ProjectOxford.Face.Contract.Face[] Faces { get; set; } = null;
         public Microsoft.ProjectOxford.Common.Contract.EmotionScores[] EmotionScores { get; set; } = null;
         public string[] CelebrityNames { get; set; } = null;

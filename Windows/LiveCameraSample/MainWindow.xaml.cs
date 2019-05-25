@@ -59,9 +59,8 @@ namespace LiveCameraSample
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
-        private IFaceClient _faceClient = null;
+        //private IFaceClient _faceClient = null;
         private IFaceOperations fo = null;
-        private const string faceEndpoint ="https://westcentralus.api.cognitive.microsoft.com";
         private VisionAPI.VisionServiceClient _visionClient = null;
         private readonly FrameGrabber<LiveCameraResult> _grabber = null;
         private static readonly ImageEncodingParam[] s_jpegParams = {
@@ -72,6 +71,13 @@ namespace LiveCameraSample
         private LiveCameraResult _latestResultsToDisplay = null;
         private AppMode _mode;
         private DateTime _startTime;
+
+        private const string subscriptionKey = "fa6122356e204afea55c8c590b3caa82";
+
+        private const string faceEndpoint = "https://southcentralus.api.cognitive.microsoft.com";
+        private readonly IFaceClient _faceClient = new FaceClient(
+            new ApiKeyServiceClientCredentials(subscriptionKey),
+            new System.Net.Http.DelegatingHandler[] { });
 
         public enum AppMode
         {
@@ -85,17 +91,6 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
-
-            if (Uri.IsWellFormedUriString(faceEndpoint, UriKind.Absolute))
-            {
-                _faceClient.Endpoint = faceEndpoint;
-            }
-            else
-            {
-                MessageBox.Show(faceEndpoint,
-                    "Invalid URI", MessageBoxButton.OK, MessageBoxImage.Error);
-                Environment.Exit(0);
-            }
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -247,7 +242,15 @@ namespace LiveCameraSample
             // Count the API call. 
             Properties.Settings.Default.FaceAPICallCount++;
             // Output. 
-            return new LiveCameraResult {DF=faces[0]};//CAMBIAR PARA REGRESAR SOLO UN VALOR NO SOLO EL PRIMERO
+            //foreach (var l in faces)
+            //{
+            //    MessageBox.Show(l.FaceAttributes.Glasses.ToString());
+            //}
+
+            return new LiveCameraResult {
+                UserFace = faces
+            };
+
         }
 
         /// <summary> Function which submits a frame to the Emotion API. </summary>
@@ -433,11 +436,23 @@ namespace LiveCameraSample
             Properties.Settings.Default.FaceAPIKey = Properties.Settings.Default.FaceAPIKey.Trim();
             Properties.Settings.Default.VisionAPIKey = Properties.Settings.Default.VisionAPIKey.Trim();
 
+            if (Uri.IsWellFormedUriString(faceEndpoint, UriKind.Absolute))
+            {
+                _faceClient.Endpoint = faceEndpoint;
+                MessageArea.Text = "Endpoint Initiated";
+            }
+            else
+            {
+                MessageBox.Show(faceEndpoint,
+                    "Invalid URI", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
+
             // Create API clients. 
             //_faceClient = new FaceAPI.FaceServiceClient(Properties.Settings.Default.FaceAPIKey, Properties.Settings.Default.FaceAPIHost);
-            _faceClient = new FaceClient(
-            new ApiKeyServiceClientCredentials(Properties.Settings.Default.FaceAPIKey),
-            new System.Net.Http.DelegatingHandler[] { });
+            //_faceClient = new FaceClient(
+            //new ApiKeyServiceClientCredentials("fa6122356e204afea55c8c590b3caa82"),
+            //new System.Net.Http.DelegatingHandler[] { });
             //fo = new FaceOperations(_faceClient);
             _visionClient = new VisionAPI.VisionServiceClient(Properties.Settings.Default.VisionAPIKey, Properties.Settings.Default.VisionAPIHost);
 
@@ -451,7 +466,6 @@ namespace LiveCameraSample
             _startTime = DateTime.Now;
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
-            await CreateFaceGroup("Daniel");
 
         }
 
