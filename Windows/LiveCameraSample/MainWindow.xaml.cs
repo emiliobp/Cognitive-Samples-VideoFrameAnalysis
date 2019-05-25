@@ -40,8 +40,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.ProjectOxford.Common;
-using Microsoft.ProjectOxford.Face.Contract;
+using Microsoft.Azure.CognitiveServices.Vision.Face;
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
+//using Microsoft.ProjectOxford.Common;
+//using Microsoft.ProjectOxford.Face.Contract;
 using Newtonsoft.Json;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
@@ -57,8 +59,9 @@ namespace LiveCameraSample
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
-        private FaceAPI.FaceServiceClient _faceClient = null;
-        //private FaceAPI.FaceServiceClient _faceClient = new FaceAPI.FaceServiceClient("Subscription");
+        private IFaceClient _faceClient = null;
+        private IFaceOperations fo = null;
+        private const string faceEndpoint ="https://westcentralus.api.cognitive.microsoft.com";
         private VisionAPI.VisionServiceClient _visionClient = null;
         private readonly FrameGrabber<LiveCameraResult> _grabber = null;
         private static readonly ImageEncodingParam[] s_jpegParams = {
@@ -82,6 +85,17 @@ namespace LiveCameraSample
         public MainWindow()
         {
             InitializeComponent();
+
+            if (Uri.IsWellFormedUriString(faceEndpoint, UriKind.Absolute))
+            {
+                _faceClient.Endpoint = faceEndpoint;
+            }
+            else
+            {
+                MessageBox.Show(faceEndpoint,
+                    "Invalid URI", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -169,38 +183,32 @@ namespace LiveCameraSample
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
         
-        private async Task<PersonGroup> CreateFaceGroup(String personName)
+        private async Task CreateFaceGroup(String personName)
         {
             bool groupExists = false;
             string personGroupId = "myfriends";
+            
             // Test whether the group already exists
-            try
+            try { 
+                await _faceClient.PersonGroup.ListAsync(personGroupId);
+                MessageArea.Text = "The group already Exists";
+                groupExists = true;
+            }catch(Exception ex)
             {
-               return await FaceAPI.GetPersonGroupAsync(personGroupId);
-                //groupExists = true;
-            }
-            catch (ClientException ex)
-            {
-                if (ex.Error.Code != "PersonGroupNotFound")
-                {
-                    throw;
-                }
-                throw;
-            }
-/**
-            // check to see if group exists and if so delete the group.
-            if (groupExists)
-            {
-                await _faceClient.DeletePersonGroupAsync(personGroupId);
+                
+   
+                await _grabber.StopProcessingAsync();
             }
 
             try
             {
-                await _faceClient.CreatePersonGroupAsync(personGroupId, personGroupId);
+                await _faceClient.PersonGroup.CreateAsync(personGroupId, personGroupId);
+                MessageArea.Text = "The group was created successfully";
             }
-            catch (ClientException ex)
+            catch ( Exception ex)
             {
-                throw;
+                await _grabber.StopProcessingAsync();
+                throw ex;
             }
 
             // Create an empty PersonGroup
@@ -208,13 +216,8 @@ namespace LiveCameraSample
             //await _faceClient.CreatePersonGroupAsync(personGroupId, "My Friends");
 
             // Define Anna
-            CreatePersonResult friend1 = await _faceClient.CreatePersonAsync(
-                // Id of the PersonGroup that the person belonged to
-                personGroupId,
-                // Name of the person
-                personName
-            );
-    */
+            await _faceClient.PersonGroup.CreateAsync(personGroupId, personName);
+           
         }
         
         /// <summary> Function which submits a frame to the Face API. </summary>
@@ -223,19 +226,28 @@ namespace LiveCameraSample
         ///     and containing the faces returned by the API. </returns>
         private async Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame)
         {
+            IList<DetectedFace> faces = new List<DetectedFace>();
             // Encode image. 
             var jpg = frame.Image.ToMemoryStream(".jpg", s_jpegParams);
             // Submit image to API. 
+            /*
             var attrs = new List<FaceAPI.FaceAttributeType> {
                 FaceAPI.FaceAttributeType.Age,
                 FaceAPI.FaceAttributeType.Gender,
                 FaceAPI.FaceAttributeType.HeadPose
-            };
-            var faces = await _faceClient.DetectAsync(jpg, returnFaceAttributes: attrs);
+            };*/
+            IList<FaceAttributeType> faceAttributes =
+                new FaceAttributeType[]
+                {
+                    FaceAttributeType.Gender, FaceAttributeType.Age,
+                    FaceAttributeType.Smile, FaceAttributeType.Emotion,
+                    FaceAttributeType.Glasses, FaceAttributeType.Hair
+                };
+            faces = await _faceClient.Face.DetectWithStreamAsync(jpg, true,false, faceAttributes);
             // Count the API call. 
             Properties.Settings.Default.FaceAPICallCount++;
             // Output. 
-            return new LiveCameraResult { Faces = faces };
+            return new LiveCameraResult {DF=faces[0]};//CAMBIAR PARA REGRESAR SOLO UN VALOR NO SOLO EL PRIMERO
         }
 
         /// <summary> Function which submits a frame to the Emotion API. </summary>
@@ -256,11 +268,13 @@ namespace LiveCameraSample
                 // If localFaces is null, we're not performing local face detection.
                 // Use Cognigitve Services to do the face detection.
                 Properties.Settings.Default.FaceAPICallCount++;
-                faces = await _faceClient.DetectAsync(
-                    jpg,
-                    /* returnFaceId= */ false,
-                    /* returnFaceLandmarks= */ false,
-                    new FaceAPI.FaceAttributeType[1] { FaceAPI.FaceAttributeType.Emotion });
+                //Commented EMILIO
+               // faces = await _faceClient.DetectAsync(
+               //     jpg,
+               //     /* returnFaceId= */ false,
+               //     /* returnFaceLandmarks= */ false,
+               //     new FaceAPI.FaceAttributeType[1] { FaceAPI.FaceAttributeType.Emotion }
+               //     );
             }
             else
             {
@@ -408,22 +422,25 @@ namespace LiveCameraSample
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-         /**   if (!CameraList.HasItems)
+            
+            if (!CameraList.HasItems)
             {
                 MessageArea.Text = "No cameras found; cannot start processing";
                 return;
             }
-        */
+
             // Clean leading/trailing spaces in API keys. 
             Properties.Settings.Default.FaceAPIKey = Properties.Settings.Default.FaceAPIKey.Trim();
             Properties.Settings.Default.VisionAPIKey = Properties.Settings.Default.VisionAPIKey.Trim();
 
             // Create API clients. 
-            _faceClient = new FaceAPI.FaceServiceClient(Properties.Settings.Default.FaceAPIKey, Properties.Settings.Default.FaceAPIHost);
+            //_faceClient = new FaceAPI.FaceServiceClient(Properties.Settings.Default.FaceAPIKey, Properties.Settings.Default.FaceAPIHost);
+            _faceClient = new FaceClient(
+            new ApiKeyServiceClientCredentials(Properties.Settings.Default.FaceAPIKey),
+            new System.Net.Http.DelegatingHandler[] { });
+            //fo = new FaceOperations(_faceClient);
             _visionClient = new VisionAPI.VisionServiceClient(Properties.Settings.Default.VisionAPIKey, Properties.Settings.Default.VisionAPIHost);
 
-            PersonGroup x = await CreateFaceGroup("Daniel");
-            MessageArea.Text = x.ToString();
             // How often to analyze. 
             _grabber.TriggerAnalysisOnInterval(Properties.Settings.Default.AnalysisInterval);
 
@@ -434,6 +451,8 @@ namespace LiveCameraSample
             _startTime = DateTime.Now;
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
+            await CreateFaceGroup("Daniel");
+
         }
 
         private async void StopButton_Click(object sender, RoutedEventArgs e)

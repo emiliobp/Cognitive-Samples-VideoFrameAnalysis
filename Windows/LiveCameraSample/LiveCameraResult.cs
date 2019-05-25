@@ -30,15 +30,15 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // 
+using Microsoft.Azure.CognitiveServices.Vision.Face.Models;
 
 namespace LiveCameraSample
 {
     // Class to hold all possible result types. 
     public class LiveCameraResult
     {
+        public Microsoft.Azure.CognitiveServices.Vision.Face.Models.DetectedFace DF { get; set; }
         public Microsoft.ProjectOxford.Face.Contract.Face[] Faces { get; set; } = null;
-        //Emilio
-        public Microsoft.ProjectOxford.Face.Contract.CreatePersonResult PersonResult { get; set; } = null;
         public Microsoft.ProjectOxford.Common.Contract.EmotionScores[] EmotionScores { get; set; } = null;
         public string[] CelebrityNames { get; set; } = null;
         public Microsoft.ProjectOxford.Vision.Contract.Tag[] Tags { get; set; } = null;
