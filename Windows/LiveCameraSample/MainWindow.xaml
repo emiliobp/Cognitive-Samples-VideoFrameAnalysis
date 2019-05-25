@@ -9,18 +9,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="35" />
+            <RowDefinition />
+            <RowDefinition Height="135.2" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar" Margin="0,0,0.4,0.2">
             <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
             <Button Content="Start Camera" Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" />
             <Button Content="Stop Camera" Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click" />
             <TextBlock VerticalAlignment="Center" Margin="15,5,0,5" Text="Mode:" />
             <ComboBox x:Name="ModeList" Width="100" Margin="5,5,0,5" Loaded="ModeList_Loaded" SelectionChanged="ModeList_SelectionChanged" />
         </StackPanel>
-        <Button Content="Show/Hide Settings" Padding="5,0" Margin="5" Click="SettingsButton_Click" HorizontalAlignment="Right" />
-        <Grid Grid.Row="1">
+        <Button Content="Show/Hide Settings" Padding="5,0" Margin="0,5,5.4,5.2" Click="SettingsButton_Click" HorizontalAlignment="Right" Width="115" />
+        <Grid Margin="0,35,0.4,4.6" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -66,6 +66,6 @@
                 <Button Margin="5" Content="Save" Click="SaveSettingsButton_Click" />
             </StackPanel>
         </Grid>
-        <TextBlock Name="MessageArea" Margin="5" Grid.Row="2" VerticalAlignment="Center" />
+        <TextBlock Name="MessageArea" Margin="5,15.4,5.4,10.8" Grid.Row="2" VerticalAlignment="Center" Height="109" RenderTransformOrigin="0.503,0.533" />
     </Grid>
 </Window>

@@ -178,42 +178,6 @@ namespace LiveCameraSample
             _localFaceDetector.Load("Data/haarcascade_frontalface_alt2.xml");
         }
         
-        private async Task CreateFaceGroup(String personName)
-        {
-            bool groupExists = false;
-            string personGroupId = "myfriends";
-            
-            // Test whether the group already exists
-            try { 
-                await _faceClient.PersonGroup.ListAsync(personGroupId);
-                MessageArea.Text = "The group already Exists";
-                groupExists = true;
-            }catch(Exception ex)
-            {
-                
-   
-                await _grabber.StopProcessingAsync();
-            }
-
-            try
-            {
-                await _faceClient.PersonGroup.CreateAsync(personGroupId, personGroupId);
-                MessageArea.Text = "The group was created successfully";
-            }
-            catch ( Exception ex)
-            {
-                await _grabber.StopProcessingAsync();
-                throw ex;
-            }
-
-            // Create an empty PersonGroup
-            //string personGroupId = "myfriends";
-            //await _faceClient.CreatePersonGroupAsync(personGroupId, "My Friends");
-
-            // Define Anna
-            await _faceClient.PersonGroup.CreateAsync(personGroupId, personName);
-           
-        }
         
         /// <summary> Function which submits a frame to the Face API. </summary>
         /// <param name="frame"> The video frame to submit. </param>
@@ -246,6 +210,24 @@ namespace LiveCameraSample
             //{
             //    MessageBox.Show(l.FaceAttributes.Glasses.ToString());
             //}
+            IList<Guid> faceId = faces.Select(face => face.FaceId.GetValueOrDefault()).ToList();
+
+            var results = await _faceClient.Face.IdentifyAsync(faceId, "myfriends");
+            foreach (var identifyResult in results)
+            {
+                MessageBox.Show($"Result of face: {identifyResult.FaceId} Confidence: {identifyResult.Candidates[0].Confidence}");
+                if (identifyResult.Candidates.Count == 0)
+                {
+                    MessageBox.Show("No one identified ");
+                }
+                else
+                {
+                    // Get top 1 among all candidates returned
+                    var candidateId = identifyResult.Candidates[0].PersonId;
+                    var person = await _faceClient.PersonGroupPerson.GetAsync("myfriends", candidateId);
+                    MessageBox.Show($"Identified as {person.Name} ");
+                }
+            }
 
             return new LiveCameraResult {
                 UserFace = faces
@@ -467,6 +449,11 @@ namespace LiveCameraSample
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
 
+            // Daniel CreateGroup called
+            string groupId = "myFriends";
+            CreateGroupPerson faceGroup = new CreateGroupPerson();
+            string writeBack = await faceGroup.FaceGroup(groupId);
+            MessageArea.Text += $"Group: {groupId} created: extra messages {writeBack}";
         }
 
         private async void StopButton_Click(object sender, RoutedEventArgs e)

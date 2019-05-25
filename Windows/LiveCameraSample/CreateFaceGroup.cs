@@ -66,32 +66,19 @@ namespace LiveCameraSample
 
             if (groupExists)
             {
-                IList<Person> listGroup;
                 try
                 {
                     writeback = "";
-                    listGroup = await faceClient.PersonGroupPerson.ListAsync(personGroupId);
-                    foreach (var list in listGroup)
-                    {
-                        writeback += $"value: {list.Name}: {list.PersonId} ";
-                        // await faceClient.PersonGroupPerson.DeleteAsync(personGroupId, list.PersonId);
-                    }
-                    if (listGroup.Count().Equals(0))
-                    {
-                        writeback = listGroup.Count().ToString();
-                        Person friend1 = await faceClient.PersonGroupPerson.CreateAsync(personGroupId, "Daniel");
-                        //Daniel: d201468d-0635-49ea-bd93-1bf1d4ab9fbb
-
-                        foreach (string imagePath in Directory.GetFiles(friend1ImageDir, "*.jpg"))
-                        {
-                            using (Stream s = File.OpenRead(imagePath))
-                            {
-                                // Detect faces in the image and add to Anna
-                                await faceClient.PersonGroupPerson.AddFaceFromStreamAsync(
-                                    personGroupId, friend1.PersonId, s);
-                            }
-                        }
-                    }
+                    writeback = GetGroupList(personalGroupId);
+                    //if (listGroup.Count().Equals(0))
+                    //{
+                    //    writeback = listGroup.Count().ToString();
+                    //    Person friend1 = await faceClient.PersonGroupPerson.CreateAsync(personGroupId, "Emilio");
+                    //    //Daniel: d201468d-0635-49ea-bd93-1bf1d4ab9fbb
+                    //}
+                    Person friend1 = await faceClient.PersonGroupPerson.CreateAsync(personGroupId, "Daniel2");
+                    AddPicsToFace(personGroupId, friend1);
+                    writeback = GetGroupList(personalGroupId);
                 }
                 catch (Exception e)
                 {
@@ -101,6 +88,31 @@ namespace LiveCameraSample
                 }
             }
             return writeback;
+        }
+
+        private void AddPicsToFace (string personGroupId, Person friend1)
+        {
+            foreach (string imagePath in Directory.GetFiles(friend1ImageDir, "*.jpg"))
+            {
+                using (Stream s = File.OpenRead(imagePath))
+                {
+                    // Detect faces in the image and add to Anna
+                    await faceClient.PersonGroupPerson.AddFaceFromStreamAsync(
+                        personGroupId, friend1.PersonId, s);
+                }
+            }
+        }
+        private string GetGroupList(string personGroupId)
+        {
+            string writeBack = "";
+            IList<Person> listGroup;
+            listGroup = await faceClient.PersonGroupPerson.ListAsync(personGroupId);
+            foreach (var list in listGroup)
+            {
+                writeBack += $"value: {list.Name}: {list.PersonId} ";
+                // await faceClient.PersonGroupPerson.DeleteAsync(personGroupId, list.PersonId);
+            }
+            return writeBack;
         }
     }
 }
