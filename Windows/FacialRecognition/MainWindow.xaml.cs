@@ -139,13 +139,29 @@ namespace FacialRecognition
             await _grabber.StopProcessingAsync();
         }
 
-        private void CreateGroupButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateGroupButton_Click(object sender, RoutedEventArgs e)
         {
+            log.Info("Create Group Button was pressed");
+
+            string message = "";
+            //  Temporary code
+            String personGroupId = "Needs to be changed for a user input";
+
+            //message = await groupPerson.VerifyGroupExist(personGroupId);
+            log.Debug($"Message returned when creating a group {message}");
         }
 
-        private void CreateUserButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateUserButton_Click(object sender, RoutedEventArgs e)
         {
+            log.Info("Create User Button was pressed");
 
+            string trainingMessage = "";
+            string personGroupId = props.groupPersonId;
+            //  Pics need to be taken here, directory must be also created
+            //await groupPerson.CreatePerson(personGroupId);
+
+            //trainingMessage = await groupPerson.TrainGroup(personGroupId);
+            log.Debug($"Training Message: {trainingMessage}");
         }
     }
 }

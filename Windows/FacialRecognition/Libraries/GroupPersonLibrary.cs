@@ -108,7 +108,7 @@ namespace FacialRecognition.Libraries
         /// </summary>
         /// <param name="personGroupId"></param>
         /// <returns>String message that indicates training was succesful or not</returns>
-        private async Task<string> TrainGroup(string personGroupId)
+        public async Task<string> TrainGroup(string personGroupId)
         {
             log.Info("Enter - Training Group Method");
 
