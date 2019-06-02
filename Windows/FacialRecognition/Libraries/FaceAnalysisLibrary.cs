@@ -19,6 +19,9 @@ namespace FacialRecognition.Libraries
 
         // Initialize Instances
         LiveCameraResult props = new LiveCameraResult();
+        SpeechToLuis speechToLuis = new SpeechToLuis();
+        private readonly FrameGrabber<LiveCameraResult> _grabber = new FrameGrabber<LiveCameraResult>();
+
 
         /// <summary>
         /// Method to identify a person based on the livestream attributes
@@ -52,6 +55,20 @@ namespace FacialRecognition.Libraries
             string messageIdentify = await identify.IdentifyPerson(groupPersonId, faces);
 
             log.Debug($"Message of user identified: {messageIdentify}");
+
+            if (messageIdentify != null)
+            {
+                log.Debug("turning off frame grabber");
+                await _grabber.StopProcessingAsync();
+
+                //log.Debug(" Initializgint Speech to LUIS services");
+                //int x = 0;
+                //while (x == 0)
+                //{
+                //    await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
+                //}
+            }
+            
 
             return new LiveCameraResult
             {

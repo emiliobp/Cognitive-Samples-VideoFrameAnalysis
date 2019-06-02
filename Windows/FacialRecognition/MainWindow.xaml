@@ -16,8 +16,8 @@
             <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
             <Button Content="Start Camera" Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" />
             <Button Content="Stop Camera" Padding="5,0" Margin="5,5,0,5" Click="StopButton_Click" />
-            <Button Content="Create User" Padding="5,0" Margin="5,5,0,5" Click="CreateUserButton_Click" />
-            <Button Content="Create Group" Padding="5,0" Margin="5,5,0,5" Click="CreateGroupButton_Click" />
+            <Button Content="Test Text-to-Speech" Padding="5,0" Margin="5,5,0,5" Click="CreateUserButton_Click" />
+            <Button Content="Test Speech-to-LUIS" Padding="5,0" Margin="5,5,0,5" Click="CreateGroupButton_Click" />
         </StackPanel>
         <Grid Margin="0,35,0.4,4.6" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>

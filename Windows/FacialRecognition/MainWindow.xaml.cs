@@ -29,10 +29,16 @@ namespace FacialRecognition
                 new System.Net.Http.DelegatingHandler[] { });
         }
 
+        //  Initialize LUIS in SpeechToLuis class individual for each method -- will be changed
+
+
         //  Instances
         FaceAnalysisLibrary faceAnalysis = new FaceAnalysisLibrary();
         GroupPersonLibrary groupPerson = new GroupPersonLibrary();
         LiveCameraResult props = new LiveCameraResult();
+        SpeechToLuis speechToLuis = new SpeechToLuis();
+        TextToSpeech textToSpeech = new TextToSpeech();
+
 
         //  Grabber
         private readonly FrameGrabber<LiveCameraResult> _grabber = null;
@@ -131,7 +137,6 @@ namespace FacialRecognition
                 _grabber.AnalysisFunction = faceAnalysis.FacesAnalysisFunction;
                 MessageArea.Text = "Finalize Face Analysis";
             }
-            
         }
 
         private async void StopButton_Click(object sender, RoutedEventArgs e)
@@ -141,27 +146,34 @@ namespace FacialRecognition
 
         private async void CreateGroupButton_Click(object sender, RoutedEventArgs e)
         {
-            log.Info("Create Group Button was pressed");
+            //log.Info("Create Group Button was pressed");
 
-            string message = "";
-            //  Temporary code
-            String personGroupId = "Needs to be changed for a user input";
+            //string message = "";
+            ////  Temporary code
+            //String personGroupId = "Needs to be changed for a user input";
 
-            //message = await groupPerson.VerifyGroupExist(personGroupId);
-            log.Debug($"Message returned when creating a group {message}");
+            ////message = await groupPerson.VerifyGroupExist(personGroupId);
+            //log.Debug($"Message returned when creating a group {message}");
+
+            log.Debug(" Initialize Speech to LUIS services");
+            await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
         }
 
         private async void CreateUserButton_Click(object sender, RoutedEventArgs e)
         {
             log.Info("Create User Button was pressed");
 
-            string trainingMessage = "";
-            string personGroupId = props.groupPersonId;
-            //  Pics need to be taken here, directory must be also created
-            //await groupPerson.CreatePerson(personGroupId);
+            //string trainingMessage = "";
+            //string personGroupId = props.groupPersonId;
+            ////  Pics need to be taken here, directory must be also created
+            ////await groupPerson.CreatePerson(personGroupId);
 
-            //trainingMessage = await groupPerson.TrainGroup(personGroupId);
-            log.Debug($"Training Message: {trainingMessage}");
+            ////trainingMessage = await groupPerson.TrainGroup(personGroupId);
+            //log.Debug($"Training Message: {trainingMessage}");
+
+            log.Debug("Initialize Text to Speech services");
+            await textToSpeech.SynthesisToSpeakerAsync();
+            log.Debug("Finished Text to Speech");
         }
     }
 }
