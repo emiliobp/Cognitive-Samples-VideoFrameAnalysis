@@ -15,7 +15,7 @@ namespace Demo_ChinaTown.Libraries
         const string friend1ImageDir = @"C:\Users\daniel\Desktop\test";
 
         // Initialize Instances
-        LiveCameraResult props = new LiveCameraResult();
+        readonly LiveCameraResult props = new LiveCameraResult();
 
         /// <summary>
         /// Method verifies if group entered to be created exists
@@ -210,6 +210,7 @@ namespace Demo_ChinaTown.Libraries
                 if (identifyResult.Candidates.Count == 0)
                 {
                     log.Debug("No one identified ");
+                    return "No one identified";
                 }
                 else
                 {

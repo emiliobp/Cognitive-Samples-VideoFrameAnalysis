@@ -17,9 +17,12 @@ namespace Demo_ChinaTown.Libraries
         };
 
         // Initialize Instances
-        LiveCameraResult props = new LiveCameraResult();
+        readonly LiveCameraResult props = new LiveCameraResult();
         SpeechToLuis speechToLuis = new SpeechToLuis();
         private readonly FrameGrabber<LiveCameraResult> _grabber = new FrameGrabber<LiveCameraResult>();
+        TextToSpeech textToSpeech = new TextToSpeech();
+        Program mainProgram = new Program();
+
 
 
         /// <summary>
@@ -57,17 +60,28 @@ namespace Demo_ChinaTown.Libraries
 
             if (messageIdentify != null)
             {
-                log.Debug("turning off frame grabber");
-                await _grabber.StopProcessingAsync();
+                String mensajeTemp = $"Hola {messageIdentify}";
 
-                //log.Debug(" Initializgint Speech to LUIS services");
-                //int x = 0;
-                //while (x == 0)
-                //{
-                //    await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
-                //}
+                log.Debug("Initialize Text to Speech services");
+                await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                log.Debug($"Finished Text to Speech");
+
+                await mainProgram.UserFound();
+
+            } else if (messageIdentify.Equals("No one identified"))
+            {
+                String mensajeTemp = $"Hola no nos conocemos soy Wong assistente de Chinatown";
+
+                log.Debug("Initialize Text to Speech services");
+                await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+
+                mensajeTemp = "Como te llamas tu?, dime Me llamo, y tu nombre";
+                await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                log.Debug($"Finished Text to Speech");
+
+                //  Poner regreso de nombre de LUIS crear nueva entity para nombre o usar Speech to Text y no Speech to LUIS
+
             }
-            
 
             return new LiveCameraResult
             {

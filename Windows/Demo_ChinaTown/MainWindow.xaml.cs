@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
+
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -17,10 +19,6 @@ namespace Demo_ChinaTown
     {
         //  Initializing Logger
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger("MainWindow.cs");
-
-        //  Initializing Face API
-        private const string subscriptionKey = "fa6122356e204afea55c8c590b3caa82";
-        private const string faceEndpoint = "https://southcentralus.api.cognitive.microsoft.com";
         
         //  Instances
         FaceAnalysisLibrary faceAnalysis = new FaceAnalysisLibrary();
@@ -39,22 +37,6 @@ namespace Demo_ChinaTown
         {
             InitializeComponent();
 
-            props.FaceClientInit(subscriptionKey);
-            //  Face API Initiating endpoint
-            if (Uri.IsWellFormedUriString(faceEndpoint, UriKind.Absolute))
-            {
-                props.faceClient.Endpoint = faceEndpoint;
-                MessageArea.Text = "Endpoint Initiated";
-                log.Info("Endpont Initiated");
-            }
-            else
-            {
-                MessageBox.Show(faceEndpoint,
-                    "Invalid URI", MessageBoxButton.OK, MessageBoxImage.Error);
-                log.Error($"{faceEndpoint} Invalid URI");
-                Environment.Exit(0);
-            }
-
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
 
@@ -66,6 +48,7 @@ namespace Demo_ChinaTown
                 this.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     // Display the image in the left pane.
+                    LeftImage.Visibility = Visibility.Visible;
                     LeftImage.Source = e.Frame.Image.ToBitmapSource();
 
                     // If we're fusing client-side face detection with remote analysis, show the
@@ -94,10 +77,11 @@ namespace Demo_ChinaTown
             comboBox.SelectedIndex = 0;
         }
 
-        private async void Program()
+        private async Task Program()
         {
             //  Variables
             String luisResult = "";
+            await CameraInit();
 
             do
             {
@@ -116,33 +100,36 @@ namespace Demo_ChinaTown
                 {
                     //  Enable Camera
                     LeftImage.Visibility = Visibility.Visible;
-                    faceRecognition();
-
-                    String mensajeTemp = "Hola Usuario \n";
-                    MessageArea.Text = mensajeTemp;
-
-                    log.Debug("Initialize Text to Speech services");
-                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
-                    log.Debug($"Finished Text to Speech");
-
+                    await faceRecognition();
                 }
             } while (luisResult != null || luisResult != "Intent not recognized." || luisResult != "Speech could not be recognized.");
         }
 
-        private async void faceRecognition()
+        private async Task faceRecognition()
         {
             log.Info("Enter - Face Recognition Main Window");
 
+            //  set property for grouppersonid, this is used across all methods
+            string groupPersonId = "myfriends";
+            props.groupPersonId = groupPersonId;
+
+            string message = await groupPerson.VerifyGroupExist(groupPersonId);
+            if (message == "Group already exists")
+            {
+                log.Debug("Group Exist carry on on analysis");
+                _grabber.AnalysisFunction = faceAnalysis.FacesAnalysisFunction;
+                MessageArea.Text = "Finalize Face Analysis";
+            }
+        }
+
+        private async Task CameraInit()
+        {
             if (!CameraList.HasItems)
             {
                 MessageArea.Text = "No cameras found; cannot start processing";
-                return;
+                log.Error("No Camera Found");
             }
 
-            //  set property for grouppersonid, this is used across all methods
-            string groupPersonId = "myfriends";
-            props.groupPersonId = groupPersonId
-                ;
             // Define two dates.
             DateTime date1 = new DateTime(2019, 1, 1, 8, 0, 10);
             DateTime date2 = new DateTime(2019, 1, 1, 8, 0, 20);
@@ -156,14 +143,6 @@ namespace Demo_ChinaTown
             MessageArea.Text = "";
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
-
-            string message = await groupPerson.VerifyGroupExist(groupPersonId);
-            if (message == "Group already exists")
-            {
-                log.Debug("Group Exist carry on on analysis");
-                _grabber.AnalysisFunction = faceAnalysis.FacesAnalysisFunction;
-                MessageArea.Text = "Finalize Face Analysis";
-            }
         }
     }
 }

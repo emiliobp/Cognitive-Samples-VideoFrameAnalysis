@@ -257,6 +257,7 @@
     <Compile Include="Libraries\FrameGrabber.cs" />
     <Compile Include="Libraries\GroupPersonLibrary.cs" />
     <Compile Include="Libraries\LiveCameraResult.cs" />
+    <Compile Include="Libraries\Program.cs" />
     <Compile Include="Libraries\SpeechToLuis.cs" />
     <Compile Include="Libraries\TextToSpeech.cs" />
     <Compile Include="Libraries\VideoFrame.cs" />
