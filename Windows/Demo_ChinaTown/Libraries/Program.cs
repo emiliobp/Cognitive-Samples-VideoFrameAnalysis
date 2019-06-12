@@ -32,7 +32,7 @@ namespace Demo_ChinaTown.Libraries
             //  Verifying greeting to start interaction
             if (luisResult.Equals("Ubicacion"))
             {
-                
+                log.Debug("Intent identified as  'Ubicacion'");
             }
         }
     }

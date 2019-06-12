@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo_ChinaTown"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="550" Width="725">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -14,6 +14,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Name="ButtonBar" Margin="0,0,0.4,0.2">
             <ComboBox x:Name="CameraList" Width="100" Margin="5,5,0,5" Loaded="CameraList_Loaded" />
+            <Button Content="Start Camera" Padding="5,0" Margin="5,5,0,5" Click="StartButton_Click" />
         </StackPanel>
         <Grid Margin="0,35,0.4,4.6" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>

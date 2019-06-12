@@ -48,16 +48,12 @@ namespace Demo_ChinaTown
                 this.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     // Display the image in the left pane.
-                    LeftImage.Visibility = Visibility.Visible;
                     LeftImage.Source = e.Frame.Image.ToBitmapSource();
 
                     // If we're fusing client-side face detection with remote analysis, show the
                     // new frame now with the most recent analysis available. 
                 }));
             };
-
-            //  Start of program
-            Program();
         }
 
         /// <summary> Populate CameraList in the UI, once it is loaded. </summary>
@@ -77,6 +73,11 @@ namespace Demo_ChinaTown
             comboBox.SelectedIndex = 0;
         }
 
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Program();
+        }
+
         private async Task Program()
         {
             //  Variables
@@ -86,7 +87,7 @@ namespace Demo_ChinaTown
             do
             {
                 //  Hide Camera
-                LeftImage.Visibility = Visibility.Hidden;
+                //LeftImage.Visibility = Visibility.Hidden;
 
                 log.Debug(" Initialize Speech to LUIS services");
                 MessageArea.Text += "Listening ";
