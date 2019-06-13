@@ -16,24 +16,41 @@ namespace Demo_ChinaTown.Libraries
 
         public async Task UserFound()
         {
-            String mensajeTemp = $"Dime en que te puedo ayudar ";
             String luisResult = "";
-
-
-            log.Debug("Initialize Text to Speech services");
-            await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
-            log.Debug($"Finished Text to Speech");
-
-            log.Debug(" Initialize Speech to LUIS services");
-            luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
-            log.Error(luisResult);
-
-
-            //  Verifying greeting to start interaction
-            if (luisResult.Equals("Ubicacion"))
+            do
             {
-                log.Debug("Intent identified as  'Ubicacion'");
-            }
+                String mensajeTemp = $"Dime en que te puedo ayudar ";
+
+                log.Debug("Initialize Text to Speech services");
+                await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                log.Debug($"Finished Text to Speech");
+
+                log.Debug(" Initialize Speech to LUIS services");
+                luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
+                log.Error(luisResult);
+                
+
+
+                //  Verifying Ubicacion as Intent
+                if (luisResult.Equals("Ubicacion"))
+                {
+                    log.Debug("Intent identified as  'Ubicacion'");
+                    mensajeTemp = $"Starbucks se encuentra en el segundo piso, a lado de Panem ";
+
+                    log.Debug("Initialize Text to Speech services");
+                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                    log.Debug($"Finished Text to Speech");
+                }
+                else
+                {
+                    log.Debug("Intent not Ubicacion");
+                    mensajeTemp = $"No entendi";
+
+                    log.Debug("Initialize Text to Speech services");
+                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                    log.Debug($"Finished Text to Speech");
+                }
+            } while (luisResult != "Ubicacion");
         }
     }
 }

@@ -11,18 +11,52 @@ namespace Demo_ChinaTown.Libraries
 {
     class FaceAnalysisLibrary
     {
+
+        class Check
+        {
+            private bool _updating = false;
+            private bool _interaction = false;
+            public bool updating
+            {
+                get
+                {
+                    return _updating;
+                }
+            }
+
+            public bool interaction
+            {
+                get
+                {
+                    return _interaction;
+                }
+            }
+
+            public void checkit(bool _chk)
+            {
+                _updating = _chk;
+            }
+
+            public void FinishInteraction(bool _inter)
+            {
+                _interaction = _inter;
+            }
+        }
+
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger("FaceAnalysisLibrary.cs");
         private static readonly ImageEncodingParam[] s_jpegParams = {
             new ImageEncodingParam(ImwriteFlags.JpegQuality, 60)
         };
 
+        
+
         // Initialize Instances
         readonly LiveCameraResult props = new LiveCameraResult();
         SpeechToLuis speechToLuis = new SpeechToLuis();
-        private readonly FrameGrabber<LiveCameraResult> _grabber = new FrameGrabber<LiveCameraResult>();
         TextToSpeech textToSpeech = new TextToSpeech();
         Program mainProgram = new Program();
-
+        GroupPersonLibrary identify = new GroupPersonLibrary();
+        private Check chk = new Check();
 
 
         /// <summary>
@@ -32,7 +66,10 @@ namespace Demo_ChinaTown.Libraries
         /// <returns></returns>
         public async Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame)
         {
+
             log.Info("Enter - Face Analysis Function");
+
+            
 
             string groupPersonId = props.groupPersonId;
             IList<DetectedFace> faces = new List<DetectedFace>();
@@ -53,13 +90,43 @@ namespace Demo_ChinaTown.Libraries
             {
                 log.Debug($"Face Attributes: Age:{ls.FaceAttributes.Age} Gender:{ls.FaceAttributes.Gender}");
             }
-            GroupPersonLibrary identify = new GroupPersonLibrary();
+
             string messageIdentify = await identify.IdentifyPerson(groupPersonId, faces);
 
             log.Debug($"Message of user identified: {messageIdentify}");
 
+            if (chk.interaction)
+            {
+                chk.checkit(false);
+            }
+
+
+            log.Debug($"Updating check value 1: {chk.updating}");
+            if (chk.updating) return new LiveCameraResult
+            {
+                UserFace = faces
+            };
+
+            //  else if updating is false
+            UserIdentifyCheck(messageIdentify);
+
+            log.Debug($"Updating check value 2: {chk.updating}");
+
+            chk.FinishInteraction(false);
+            return new LiveCameraResult
+            {
+                UserFace = faces
+            };
+
+        }
+
+        private async Task UserIdentifyCheck(String messageIdentify)
+        {
+            chk.checkit(true);
+
             if (messageIdentify != null)
             {
+
                 String mensajeTemp = $"Hola {messageIdentify}";
 
                 log.Debug("Initialize Text to Speech services");
@@ -67,8 +134,9 @@ namespace Demo_ChinaTown.Libraries
                 log.Debug($"Finished Text to Speech");
 
                 await mainProgram.UserFound();
-
-            } else if (messageIdentify.Equals("No one identified"))
+                chk.FinishInteraction(true);
+            }
+            else if (messageIdentify.Equals("No one identified"))
             {
                 String mensajeTemp = $"Hola no nos conocemos soy Wong assistente de Chinatown";
 
@@ -82,12 +150,6 @@ namespace Demo_ChinaTown.Libraries
                 //  Poner regreso de nombre de LUIS crear nueva entity para nombre o usar Speech to Text y no Speech to LUIS
 
             }
-
-            return new LiveCameraResult
-            {
-                UserFace = faces
-            };
-
         }
     }
 }

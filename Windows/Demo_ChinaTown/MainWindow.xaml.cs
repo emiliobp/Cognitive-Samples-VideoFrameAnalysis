@@ -75,7 +75,7 @@ namespace Demo_ChinaTown
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            await Program();
+            Program();
         }
 
         private async Task Program()
@@ -83,27 +83,24 @@ namespace Demo_ChinaTown
             //  Variables
             String luisResult = "";
             await CameraInit();
+            
+            log.Info("Enter DO waiting for Greetings");
+            //  Hide Camera
+            log.Debug(" Initialize Speech to LUIS services");
+            MessageArea.Text += "Listening ";
+            luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
+            MessageArea.Text += "End Listening\n ";
+            log.Error(luisResult);
 
-            do
+
+            //  Verifying greeting to start interaction
+            if (luisResult.Equals("Greetings"))
             {
-                //  Hide Camera
+                //  Enable Camera
+                LeftImage.Visibility = Visibility.Visible;
+                faceRecognition();
                 //LeftImage.Visibility = Visibility.Hidden;
-
-                log.Debug(" Initialize Speech to LUIS services");
-                MessageArea.Text += "Listening ";
-                luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
-                MessageArea.Text += "End Listening\n ";
-                log.Error(luisResult);
-                
-                
-                //  Verifying greeting to start interaction
-                if (luisResult.Equals("Greetings"))
-                {
-                    //  Enable Camera
-                    LeftImage.Visibility = Visibility.Visible;
-                    await faceRecognition();
-                }
-            } while (luisResult != null || luisResult != "Intent not recognized." || luisResult != "Speech could not be recognized.");
+            }
         }
 
         private async Task faceRecognition()
@@ -111,16 +108,16 @@ namespace Demo_ChinaTown
             log.Info("Enter - Face Recognition Main Window");
 
             //  set property for grouppersonid, this is used across all methods
-            string groupPersonId = "myfriends";
-            props.groupPersonId = groupPersonId;
+            //string groupPersonId = "myfriends";
+            //props.groupPersonId = groupPersonId;
 
-            string message = await groupPerson.VerifyGroupExist(groupPersonId);
-            if (message == "Group already exists")
-            {
-                log.Debug("Group Exist carry on on analysis");
+            //string message = await groupPerson.VerifyGroupExist(groupPersonId);
+            //if (message == "Group already exists")
+            //{
+              //  log.Debug("Group Exist carry on on analysis");
                 _grabber.AnalysisFunction = faceAnalysis.FacesAnalysisFunction;
                 MessageArea.Text = "Finalize Face Analysis";
-            }
+            //}
         }
 
         private async Task CameraInit()
@@ -133,7 +130,7 @@ namespace Demo_ChinaTown
 
             // Define two dates.
             DateTime date1 = new DateTime(2019, 1, 1, 8, 0, 10);
-            DateTime date2 = new DateTime(2019, 1, 1, 8, 0, 20);
+            DateTime date2 = new DateTime(2019, 1, 1, 8, 0, 15);
             // Calculate the interval between the two dates.
             TimeSpan interval = date2 - date1;
 
