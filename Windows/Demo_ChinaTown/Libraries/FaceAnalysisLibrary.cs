@@ -95,9 +95,11 @@ namespace Demo_ChinaTown.Libraries
 
             log.Debug($"Message of user identified: {messageIdentify}");
 
+            log.Debug($"Interaction Flag: {chk.interaction}");
             if (chk.interaction)
             {
                 chk.checkit(false);
+                chk.FinishInteraction(false);
             }
 
 
@@ -112,7 +114,6 @@ namespace Demo_ChinaTown.Libraries
 
             log.Debug($"Updating check value 2: {chk.updating}");
 
-            chk.FinishInteraction(false);
             return new LiveCameraResult
             {
                 UserFace = faces
@@ -126,7 +127,6 @@ namespace Demo_ChinaTown.Libraries
 
             if (messageIdentify != null)
             {
-
                 String mensajeTemp = $"Hola {messageIdentify}";
 
                 log.Debug("Initialize Text to Speech services");

@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Image x:Name="LeftImage" Grid.Column="0" Margin="5" />
-            <Image x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="1" />
+            <Image x:Name="RightImage" Grid.Column="1" Margin="5" Panel.ZIndex="1" Source="C:\Users\daniel\Desktop\mall_map.jpg"/>
         </Grid>
         <TextBlock Name="MessageArea" Margin="5,15.4,5.4,10.8" Grid.Row="2" VerticalAlignment="Center" Height="109" RenderTransformOrigin="0.503,0.533" />
     </Grid>

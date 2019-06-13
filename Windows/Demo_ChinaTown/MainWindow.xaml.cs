@@ -75,6 +75,7 @@ namespace Demo_ChinaTown
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            RightImage.Visibility = Visibility.Hidden;
             Program();
         }
 
@@ -141,6 +142,12 @@ namespace Demo_ChinaTown
             MessageArea.Text = "";
 
             await _grabber.StartProcessingCameraAsync(CameraList.SelectedIndex);
+        }
+
+        public void ShowMap()
+        {
+            log.Info("ENTER - Showing Map");
+            RightImage.Visibility = Visibility.Visible;
         }
     }
 }

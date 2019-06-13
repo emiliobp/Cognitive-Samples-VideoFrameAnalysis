@@ -35,7 +35,7 @@ namespace Demo_ChinaTown.Libraries
                 if (luisResult.Equals("Ubicacion"))
                 {
                     log.Debug("Intent identified as  'Ubicacion'");
-                    mensajeTemp = $"Starbucks se encuentra en el segundo piso, a lado de Panem ";
+                    mensajeTemp = $"Starbucks se encuentra en el segundo piso, a lado de Zara ";
 
                     log.Debug("Initialize Text to Speech services");
                     await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
