@@ -17,6 +17,7 @@ namespace Demo_ChinaTown
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow AppWindow;
         //  Initializing Logger
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger("MainWindow.cs");
         
@@ -36,6 +37,7 @@ namespace Demo_ChinaTown
         public MainWindow()
         {
             InitializeComponent();
+            AppWindow = this;
 
             // Create grabber. 
             _grabber = new FrameGrabber<LiveCameraResult>();
@@ -84,7 +86,7 @@ namespace Demo_ChinaTown
             //  Variables
             String luisResult = "";
             await CameraInit();
-            
+
             log.Info("Enter DO waiting for Greetings");
             //  Hide Camera
             log.Debug(" Initialize Speech to LUIS services");
@@ -98,7 +100,7 @@ namespace Demo_ChinaTown
             if (luisResult.Equals("Greetings"))
             {
                 //  Enable Camera
-                LeftImage.Visibility = Visibility.Visible;
+                LeftImage.Visibility = Visibility.Hidden;
                 faceRecognition();
                 //LeftImage.Visibility = Visibility.Hidden;
             }
@@ -148,6 +150,8 @@ namespace Demo_ChinaTown
         {
             log.Info("ENTER - Showing Map");
             RightImage.Visibility = Visibility.Visible;
+
+            log.Info("EXIT - Showing Map");
         }
     }
 }

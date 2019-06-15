@@ -69,6 +69,19 @@ namespace Demo_ChinaTown.Libraries
 
             log.Info("Enter - Face Analysis Function");
 
+            log.Debug($"Interaction Flag: {chk.interaction}");
+            if (chk.interaction)
+            {
+                chk.checkit(false);
+                chk.FinishInteraction(false);
+            }
+
+
+            log.Debug($"Updating check value 1: {chk.updating}");
+            if (chk.updating) return new LiveCameraResult
+            {
+                UserFace = null
+            };
             
 
             string groupPersonId = props.groupPersonId;
@@ -95,19 +108,6 @@ namespace Demo_ChinaTown.Libraries
 
             log.Debug($"Message of user identified: {messageIdentify}");
 
-            log.Debug($"Interaction Flag: {chk.interaction}");
-            if (chk.interaction)
-            {
-                chk.checkit(false);
-                chk.FinishInteraction(false);
-            }
-
-
-            log.Debug($"Updating check value 1: {chk.updating}");
-            if (chk.updating) return new LiveCameraResult
-            {
-                UserFace = faces
-            };
 
             //  else if updating is false
             UserIdentifyCheck(messageIdentify);

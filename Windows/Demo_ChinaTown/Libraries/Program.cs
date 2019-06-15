@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Demo_ChinaTown.Libraries
 {
@@ -40,6 +41,20 @@ namespace Demo_ChinaTown.Libraries
                     log.Debug("Initialize Text to Speech services");
                     await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
                     log.Debug($"Finished Text to Speech");
+
+                    //  Sets RightImage to visible from another thread by invoking the dispatcher
+                    try
+                    {
+                        Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
+                        {
+                            Demo_ChinaTown.MainWindow.AppWindow.RightImage.Visibility = Visibility.Visible;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error($"Exception for show map: {ex}");
+                        throw;
+                    }
                 }
                 else
                 {
