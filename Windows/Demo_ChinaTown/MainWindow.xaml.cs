@@ -81,6 +81,11 @@ namespace Demo_ChinaTown
             Program();
         }
 
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private async Task Program()
         {
             //  Variables

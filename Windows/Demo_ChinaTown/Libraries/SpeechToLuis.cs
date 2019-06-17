@@ -111,6 +111,11 @@ namespace Demo_ChinaTown.Libraries
                 recognizer.AddIntent(model, "Greetings", "Greetings");
                 recognizer.AddIntent(model, "None", "None");
                 recognizer.AddIntent(model, "Ubicacion", "Ubicacion");
+                recognizer.AddIntent(model, "Despedida", "Despedida");
+                recognizer.AddIntent(model, "Compras", "Compras");
+                recognizer.AddIntent(model, "Descuento", "Descuento");
+
+
 
                 // Starts recognizing.
                 log.Debug("Say something in " + language + "...");

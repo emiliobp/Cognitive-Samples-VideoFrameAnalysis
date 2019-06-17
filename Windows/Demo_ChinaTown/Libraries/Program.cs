@@ -55,17 +55,53 @@ namespace Demo_ChinaTown.Libraries
                         log.Error($"Exception for show map: {ex}");
                         throw;
                     }
+                } else if (luisResult.Equals("Descuento"))
+                {
+                    log.Debug("Intent identified as  'Descuento'");
+                    mensajeTemp = $"Hoy contamos con descuentos en Zara, toda la ropa de verano a 50%. H&M 30% y Massimo Duti a 15% en toda la tienda";
+
+                    log.Debug("Initialize Text to Speech services");
+                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                    log.Debug($"Finished Text to Speech");
+
+                } else if (luisResult.Equals("Compras"))
+                {
+                    log.Debug("Intent identified as  'Compras'");
+                    mensajeTemp = $"Contamos con tres zapaterias, Aldo, Taf y Loly in the sky. Ubicadas en el segundo piso";
+
+                    log.Debug("Initialize Text to Speech services");
+                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                    log.Debug($"Finished Text to Speech");
+
+                    Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
+                    {
+                        Demo_ChinaTown.MainWindow.AppWindow.RightImage.Visibility = Visibility.Visible;
+                    });
+                } else if (luisResult.Equals("Despedida"))
+                {
+                    log.Debug("Intent identified as  'Despedida'");
+                    mensajeTemp = $"Hasta pronto";
+
+                    log.Debug("Initialize Text to Speech services");
+                    await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
+                    log.Debug($"Finished Text to Speech");
                 }
                 else
                 {
-                    log.Debug("Intent not Ubicacion");
+                    log.Debug("Intent not recognized");
                     mensajeTemp = $"No entendi";
 
                     log.Debug("Initialize Text to Speech services");
                     await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
                     log.Debug($"Finished Text to Speech");
                 }
-            } while (luisResult != "Ubicacion");
+
+                //  Set image to hidden
+                Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
+                {
+                    Demo_ChinaTown.MainWindow.AppWindow.RightImage.Visibility = Visibility.Hidden;
+                });
+            } while (luisResult != "Despedida");
         }
     }
 }
