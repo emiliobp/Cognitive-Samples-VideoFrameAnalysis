@@ -6,43 +6,48 @@
         xmlns:local="clr-namespace:Demo_ChinaTown"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Demo" Height="600" Width="1080" ResizeMode="NoResize" WindowStyle="SingleBorderWindow"  WindowStartupLocation="CenterScreen" Background="white" Opacity="0.8">
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        Height="600" Width="1080" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid>
-        <Grid x:Name="GridMenu" Width="250" HorizontalAlignment="Left" Background="DarkBlue" Opacity=".88">
-            <StackPanel>
-                <Image Height="140"/>
-                <ListView Foreground="#FF313131" FontFamily="Champagne &amp; Limousines" FontSize="18" Background="white">
-                    <ListViewItem Height="45" Padding="0">
-                        <StackPanel Orientation="Horizontal" Margin="10 0">
-                            <TextBlock Text="Camera:" Margin="10"/>
-                            <ComboBox x:Name="CameraList" Width="100" Padding="5,0" Loaded="CameraList_Loaded" />
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" Cursor="Hand">
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
-                            <Button Content="Start Demo" Padding="5,0" Click="StartButton_Click"
-                                     BorderThickness="0"  Width="243" Height="45"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="45" Padding="0" Cursor="Hand">
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
-                            <Button Content="Stop Demo" Padding="5,0" Click="StopButton_Click"
-                                    Background="AliceBlue" BorderThickness="0"  Width="243" Height="45"/>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
-            </StackPanel>
+        <Grid Height="60" VerticalAlignment="Top" Background="#FF9C27B0">
+            <TextBlock Text="Asistente Virtual" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines" />
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}">
+                <materialDesign:PackIcon Kind="Power"/>
+            </Button>
         </Grid>
-        <Grid x:Name="GridImage" Width="830" Height="350" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.RowSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Image x:Name="LeftImage" Grid.Column="0"/>
-            <Image x:Name="RightImage" Grid.Column="1" Source="C:\Users\daniel\Desktop\mall_map.jpg"/>
-        </Grid>
-        <Grid x:Name="GridMessage" Width="830" Height="250" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <TextBlock Name="MessageArea" VerticalAlignment="Center" Height="250" RenderTransformOrigin="0.503,0.533" />
+        <Grid Margin="0 60 0 0">
+            <dragablz:TabablzControl>
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController/>
+                </dragablz:TabablzControl.InterTabController>
+                <TabItem Header="HOME">
+                    <StackPanel>
+                        <TextBlock Text="Bienvenido al Demo!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="CameraList" Width="100" Padding="5,0" Loaded="CameraList_Loaded" />
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="DEMO">
+                    <StackPanel>
+                        <TextBlock Text="Amazing designs!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Content="Start Demo" Padding="5,0" Click="StartButton_Click"
+							 BorderThickness="0"  Width="243" Height="45"/>
+                        <Grid x:Name="GridImage" Width="830" Height="350" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.RowSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="LeftImage" Grid.Column="0"/>
+                            <Image x:Name="RightImage" Grid.Column="1" Source="C:\Users\daniel\Desktop\mall_map.jpg"/>
+                        </Grid>
+                        <Grid x:Name="GridMessage" Width="1080" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                            <TextBlock Name="MessageArea" VerticalAlignment="Center" Height="250" RenderTransformOrigin="0.503,0.533" />
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="HELP">
+                    <TextBlock Text="Ask for any question!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </TabItem>
+            </dragablz:TabablzControl>
         </Grid>
     </Grid>
 </Window>

@@ -95,13 +95,12 @@ namespace Demo_ChinaTown.Libraries
                     await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
                     log.Debug($"Finished Text to Speech");
                 }
-
-                //  Set image to hidden
-                Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
-                {
-                    Demo_ChinaTown.MainWindow.AppWindow.RightImage.Visibility = Visibility.Hidden;
-                });
             } while (luisResult != "Despedida");
+            //  Set image to hidden
+            Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
+            {
+                Demo_ChinaTown.MainWindow.AppWindow.RightImage.Visibility = Visibility.Hidden;
+            });
         }
     }
 }
