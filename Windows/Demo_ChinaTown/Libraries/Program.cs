@@ -47,14 +47,6 @@ namespace Demo_ChinaTown.Libraries
                 luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
                 log.Error(luisResult);
 
-                //  Updating MessageArea
-                Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Dispatcher.Invoke((Action)delegate
-                {
-                    Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Text += $"\nUsuario: {mensajeTemp}";
-                });
-
-
-
                 //  Verifying Ubicacion as Intent
                 if (luisResult.Equals("Ubicacion"))
                 {
