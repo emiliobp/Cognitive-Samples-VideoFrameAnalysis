@@ -9,7 +9,7 @@
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         Height="600" Width="1080" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <Grid>
-        <Grid Height="60" VerticalAlignment="Top" Background="#FF9C27B0">
+        <Grid Height="60" VerticalAlignment="Top" Background="#800080">
             <TextBlock Text="Asistente Virtual" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" FontFamily="Champagne &amp; Limousines" />
             <Button HorizontalAlignment="Right" VerticalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}">
                 <materialDesign:PackIcon Kind="Power"/>
@@ -26,9 +26,9 @@
                         <ComboBox x:Name="CameraList" Width="100" Padding="5,0" Loaded="CameraList_Loaded" />
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="DEMO">
+                <TabItem Header="DEMO" HorizontalAlignment="Left" Margin="-2.4,-2,-2.2,0" Width="51">
                     <StackPanel>
-                        <TextBlock Text="Amazing designs!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Demo!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Button Content="Start Demo" Padding="5,0" Click="StartButton_Click"
 							 BorderThickness="0"  Width="243" Height="45"/>
                         <Grid x:Name="GridImage" Width="830" Height="350" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.RowSpan="2">
@@ -37,15 +37,17 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Image x:Name="LeftImage" Grid.Column="0"/>
-                            <Image x:Name="RightImage" Grid.Column="1" Source="C:\Users\daniel\Desktop\mall_map.jpg"/>
-                        </Grid>
-                        <Grid x:Name="GridMessage" Width="1080" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                            <TextBlock Name="MessageArea" VerticalAlignment="Center" Height="250" RenderTransformOrigin="0.503,0.533" />
+                            <Image x:Name="RightImage" Grid.Column="1"/>
                         </Grid>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="HELP">
-                    <TextBlock Text="Ask for any question!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TabItem Header="DIALOGO">
+                    <StackPanel>
+                        <TextBlock Text="dialogo entre asistente virtual y usuario!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Grid x:Name="GridMessage" Width="1080" Height="500" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                            <TextBlock  Name="MessageArea" HorizontalAlignment="Center" VerticalAlignment="Center"  RenderTransformOrigin="0.503,0.533" />
+                        </Grid>
+                    </StackPanel>
                 </TabItem>
             </dragablz:TabablzControl>
         </Grid>

@@ -78,6 +78,7 @@ namespace Demo_ChinaTown
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             RightImage.Visibility = Visibility.Hidden;
+            MessageArea.Text = "Empezando Demo ";
             Program();
         }
 
@@ -95,17 +96,15 @@ namespace Demo_ChinaTown
             log.Info("Enter DO waiting for Greetings");
             //  Hide Camera
             log.Debug(" Initialize Speech to LUIS services");
-            MessageArea.Text += "Listening ";
             luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
-            MessageArea.Text += "End Listening\n ";
             log.Error(luisResult);
+
+            MessageArea.Text += $"\nUsuario: {luisResult.ToString()}";
 
 
             //  Verifying greeting to start interaction
             if (luisResult.Equals("Greetings"))
             {
-                //  Enable Camera
-                LeftImage.Visibility = Visibility.Hidden;
                 faceRecognition();
                 //LeftImage.Visibility = Visibility.Hidden;
             }
@@ -124,7 +123,6 @@ namespace Demo_ChinaTown
             //{
               //  log.Debug("Group Exist carry on on analysis");
                 _grabber.AnalysisFunction = faceAnalysis.FacesAnalysisFunction;
-                MessageArea.Text = "Finalize Face Analysis";
             //}
         }
 

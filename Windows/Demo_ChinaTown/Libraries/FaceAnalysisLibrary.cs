@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Demo_ChinaTown.Libraries
 {
@@ -127,7 +128,19 @@ namespace Demo_ChinaTown.Libraries
 
             if (messageIdentify != null)
             {
+                //  Hiding Camera
+                Demo_ChinaTown.MainWindow.AppWindow.RightImage.Dispatcher.Invoke((Action)delegate
+                {
+                    Demo_ChinaTown.MainWindow.AppWindow.LeftImage.Visibility = Visibility.Hidden;
+                });
+
                 String mensajeTemp = $"Hola {messageIdentify}";
+
+                //  Updating MessageArea
+                Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Dispatcher.Invoke((Action)delegate
+                {
+                    Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Text += $"\nWong: Hola {messageIdentify}";
+                });
 
                 log.Debug("Initialize Text to Speech services");
                 await textToSpeech.SynthesisToSpeakerAsync(mensajeTemp);
