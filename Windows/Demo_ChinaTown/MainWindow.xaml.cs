@@ -99,8 +99,6 @@ namespace Demo_ChinaTown
             luisResult = await speechToLuis.RecognitionWithMicrophoneUsingLanguageAsync();
             log.Error(luisResult);
 
-            MessageArea.Text += $"\nUsuario: {luisResult.ToString()}";
-
 
             //  Verifying greeting to start interaction
             if (luisResult.Equals("Greetings"))

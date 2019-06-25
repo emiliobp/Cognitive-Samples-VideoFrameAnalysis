@@ -135,6 +135,12 @@ namespace Demo_ChinaTown.Libraries
                     log.Debug($"    Intent Id: {result.IntentId}.");
                     log.Debug($"    Language Understanding JSON: {result.Properties.GetProperty(PropertyId.LanguageUnderstandingServiceResponse_JsonResult)}.");
 
+                    //  Updating MessageArea
+                    Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Dispatcher.Invoke((Action)delegate
+                    {
+                        Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Text += $"\nUsuario: {result.Text}";
+                    });
+
                     return result.IntentId;
                 }
                 else if (result.Reason == ResultReason.RecognizedSpeech)

@@ -24,6 +24,7 @@
                     <StackPanel>
                         <TextBlock Text="Bienvenido al Demo!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <ComboBox x:Name="CameraList" Width="100" Padding="5,0" Loaded="CameraList_Loaded" />
+                        <Image Name="Logo" Width="500" Height="500" HorizontalAlignment="Center" VerticalAlignment="Center" Source="C:\\Users\\daniel\\Desktop\\Demo_Images\\chinatownLogo.png"/>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="DEMO" HorizontalAlignment="Left" Margin="-2.4,-2,-2.2,0" Width="51">
@@ -45,7 +46,7 @@
                     <StackPanel>
                         <TextBlock Text="dialogo entre asistente virtual y usuario!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Grid x:Name="GridMessage" Width="1080" Height="500" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                            <TextBlock  Name="MessageArea" HorizontalAlignment="Center" VerticalAlignment="Center"  RenderTransformOrigin="0.503,0.533" />
+                            <TextBlock  Name="MessageArea" HorizontalAlignment="Center" VerticalAlignment="Center"  RenderTransformOrigin="0.503,0.533" TextAlignment="Left" />
                         </Grid>
                     </StackPanel>
                 </TabItem>
