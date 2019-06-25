@@ -81,7 +81,7 @@ namespace Demo_ChinaTown.Libraries
                 } else if (luisResult.Equals("Descuento"))
                 {
                     log.Debug("Intent identified as  'Descuento'");
-                    mensajeTemp = $"Hoy contamos diversos descuentos en el area de comida. En Zara, toda la ropa de verano a 25%. " +
+                    mensajeTemp = $"Hoy contamos con diversos descuentos en el área de comida. En Zara, toda la ropa de verano a 25%. " +
                                     $"Massimo Dutti camisas a 25% y Banana Republic a 25% en toda la tienda";
 
                     try
@@ -112,7 +112,7 @@ namespace Demo_ChinaTown.Libraries
                 } else if (luisResult.Equals("Compras"))
                 {
                     log.Debug("Intent identified as  'Compras'");
-                    mensajeTemp = $"Contamos con tres zapaterias, Aldo, Steve Madden y Loly in the sky. Ubicadas en el segundo piso";
+                    mensajeTemp = $"Contamos con tres zapaterías, Aldo, Steve Madden y Loly in the sky. Ubicadas en el segundo piso";
 
                     try
                     {
@@ -156,7 +156,7 @@ namespace Demo_ChinaTown.Libraries
                 else
                 {
                     log.Debug("Intent not recognized");
-                    mensajeTemp = $"No entendi";
+                    mensajeTemp = $"No entendí";
 
                     //  Updating MessageArea
                     Demo_ChinaTown.MainWindow.AppWindow.MessageArea.Dispatcher.Invoke((Action)delegate
